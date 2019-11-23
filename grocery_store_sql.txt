@@ -1,0 +1,116 @@
+CREATE DATABASE grocery store;
+
+CREATE TABLE User(
+userID INT PRIMARY KEY,
+first_name varchar(30),
+last_name varchar(30),
+street_number INT,
+street_name varchar(256),
+apt_number int,
+city varchar (30),
+state varchar (10),
+zip number(10),
+username varchar(30),
+password varchar(30)
+);
+
+CREATE TABLE Staff(
+staffID INT PRIMARY KEY,
+salary INT,
+job_title varchar(100)
+);
+
+CREATE TABLE Customer(
+customerID INT PRIMARY KEY,
+balance INT
+);
+
+CREATE TABLE Delivery_address(
+customer_id INT REFERENCES Customer,
+name varchar(30),
+street_number INT,
+street_name varchar(256),
+apt_number int,
+city varchar (30),
+state varchar (10),
+zip number(10),
+primary key (customer_id)
+);
+
+CREATE TABLE Orders(
+orderID INT PRIMARY KEY,
+customer_id INT REFERENCES Customer,
+order_total INT
+);
+
+CREATE TABLE Card(
+card_number number(20) PRIMARY KEY,
+first_name varchar(30),
+last_name varchar(30),
+expiration date,
+security_code number(10),
+street_number INT,
+street_name varchar(256),
+apt_number int,
+city varchar (30),
+state varchar (10),
+zip number(10)
+);
+
+CREATE TABLE Product(
+item_name varchar(40) PRIMARY KEY,
+category varchar(20),
+size int check (sizes > 0)
+);
+
+CREATE TABLE Price(
+item_name varchar(40),
+price numeric(5,0) check (price >= 0),
+foreign key (item_name) references product
+);
+
+CREATE TABLE Supplier(
+supplierID INT PRIMARY KEY,
+item_name varchar(40),
+first_name varchar(30),
+last_name varchar(30),
+street_number INT,
+street_name varchar(256),
+city varchar (30),
+state varchar (10),
+zip number(10),
+price numeric(5,0) check (price >= 0),
+foreign key (item_name) references Product,
+foreign key (price) references Price
+);
+
+CREATE TABLE Warehouse(
+warehouseID INT PRIMARY KEY,
+item_name varchar(40),
+street_number INT,
+street_name varchar(256),
+city varchar (30),
+state varchar (10),
+zip number(10),
+capacity INT,
+foreign key (item_name) references Product
+);
+
+CREATE TABLE Stock(
+street_number INT,
+street_name varchar(256),
+city varchar (30),
+state varchar (10),
+zip number(10),
+item_name varchar(40) references Product,
+amount INT
+);
+
+CREATE TABLE Type(
+category varchar(20) PRIMARY KEY,
+item_name varchar(40) references Product,
+information varchar(265)
+);
+
+create index product_index on Product (item_name);
+create index user_index on User(firstname, lastname);
